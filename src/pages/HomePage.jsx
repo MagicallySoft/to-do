@@ -238,19 +238,52 @@ const HomePage = () => {
     setQueryFiled(list);
   };
 
+  // const copyToClipboard = async (id) => {
+  //   try {
+  //     var range = document.createRange();
+  //     range.selectNode(document.getElementById(id));
+  //     window.getSelection().removeAllRanges(); // clear current selection
+  //     window.getSelection().addRange(range); // to select text
+  //     document.execCommand("copy");
+  //     window.getSelection().removeAllRanges(); // to deselect
+  //     toast("Note's Copied");
+  //   } catch (error) {
+  //     console.log("error", error);
+  //   }
+  // };
   const copyToClipboard = async (id) => {
     try {
       var range = document.createRange();
       range.selectNode(document.getElementById(id));
-      window.getSelection().removeAllRanges(); // clear current selection
-      window.getSelection().addRange(range); // to select text
+      window.getSelection().removeAllRanges();
+      window.getSelection().addRange(range);
       document.execCommand("copy");
-      window.getSelection().removeAllRanges(); // to deselect
-      toast("Note's Copied");
+      window.getSelection().removeAllRanges();
+      
+      const copiedText = document.getElementById(id).innerText;
+      
+  
+      const response = await fetch(
+        "https://script.google.com/macros/s/AKfycbzYZAX2h2zF7qsLzhI9CLBc0fVyh7n8cX5Y74ccxGSMePRvKzEQ_SDXWHE6SRAomkzcLg/exec",
+        {
+          method: "POST",
+          mode: "no-cors",
+          body: JSON.stringify({ copiedText }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+  
+      toast("Note's Updated");
+      const data = await response.json();
+      console.log("Google Sheet Updated:", data);
     } catch (error) {
       console.log("error", error);
     }
   };
+  
+  
   return (
     <div className="container">
       <div className="d-flex justify-content-between mt-3 mb-3">
@@ -268,7 +301,8 @@ const HomePage = () => {
             onClick={() => copyToClipboard("div_id")}
             className="btn btn-primary"
           >
-            Copy Note's
+            {/* Copy Note's */}
+            Update
           </button>
         </div>
       </div>
