@@ -12,10 +12,5 @@ export default defineConfig({
         icon: true,
       },
     }),
-  ],
-  build: {
-    rollupOptions: {
-      external: ['moment'],
-    },
-  },
+  ]
 });
